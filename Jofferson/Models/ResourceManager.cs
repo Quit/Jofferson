@@ -114,6 +114,10 @@ namespace Jofferson
                 // Pop the magic again.
                 pather.Pop();
 
+                // Second-to-last resort: Extension is .lua, so there might be a luac somewhere.
+                if (pather.Last.EndsWith(".lua") && system.Exists(pather.RootlessPath + "c"))
+                    return true;
+
                 // Last resort: .lua or .luac extension
                 if (system.Exists(pather.RootlessPath + ".lua") || system.Exists(pather.RootlessPath + ".luac"))
                 {
@@ -227,15 +231,21 @@ namespace Jofferson
                 return false;
             }
 
+            // The... uh... uhhhhm....
+            // The... resolved path. Yes. That sounds good enough.
+            var fullPath = p.ToString();
+
             // Try to fetch the resource from our list?
-            if (Resources.TryGetValue(p.ToString(), out result))
+            if (Resources.TryGetValue(fullPath, out result))
                 return true;
 
             // Checks if the path exists + adjusts our pather
             bool exists = Exists(mod.FileSystem, p, false);
 
+            fullPath = p.ToString();
+
             // Try again with our new path?
-            if (Resources.TryGetValue(p.ToString(), out result))
+            if (Resources.TryGetValue(fullPath, out result))
                 return true;
 
             // Create a new resource then.
