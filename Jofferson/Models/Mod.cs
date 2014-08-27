@@ -102,7 +102,7 @@ namespace Jofferson.Models
             this.Errors = new List<Error>();
 
             this.Manifest = new Manifest(this);
-            this.Valid = this.Manifest.Exists;
+            this.Valid = this.Manifest.Exists && this.Manifest.Valid;
         }
 
         public void CheckValidity()
@@ -122,7 +122,7 @@ namespace Jofferson.Models
 
         public void LoadManifest()
         {
-            if (!this.Manifest.Exists)
+            if (!this.Manifest.Exists || !this.Manifest.Valid)
                 return;
 
             // Try to open it for Json?
