@@ -22,19 +22,5 @@ namespace Jofferson.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
-<ArrayOfString xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <string>stonehearth:customization_variants</string>
-  <string>stonehearth:task_group:harvest</string>
-  <string>stonehearth:combat</string>
-</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection VirtualReferences {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["VirtualReferences"]));
-            }
-        }
     }
 }

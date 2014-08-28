@@ -35,7 +35,25 @@ namespace Jofferson
         /// <summary>
         /// A collection which has all files that will be created as "virtual resources" in case they do not exist.
         /// </summary>
-        private static ICollection<string> VirtualResources = new HashSet<string>(Properties.Settings.Default.VirtualReferences.Cast<string>());
+        private static ICollection<string> VirtualResources;
+
+        static ResourceManager()
+        {
+
+            // Try to load our virtual resources, if any
+            try
+            {
+                using (TextReader textReader = new StreamReader("Jofferson.json"))
+                using (JsonReader jsonReader = new JsonTextReader(textReader))
+                {
+                    VirtualResources = new HashSet<string>(JObject.ReadFrom(jsonReader).Values<string>());
+                }
+            }
+            catch
+            {
+                VirtualResources = new HashSet<string>();
+            }
+        }
 
         /// <summary>
         /// Initializes the resource manager at a certain location.
