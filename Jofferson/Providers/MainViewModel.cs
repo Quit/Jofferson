@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.IO;
 using Jofferson.Models;
+using System.Windows.Threading;
 
 namespace Jofferson
 {
@@ -126,12 +127,19 @@ namespace Jofferson
 
             if (mod != null)
             {
-                foreach (var e in mod.Mod.Resources.OrderBy(r => r.Valid).ThenBy(r => r.Location).Select(m => new Views.ResourceListItem(m, true)))
+                //System.Diagnostics.Debug.WriteLine("Start: {0}", sw.Elapsed);
+                var dispatcher = App.Current.Dispatcher;
+                foreach (var resource in mod.Mod.Resources.OrderBy(r => r.Valid).ThenBy(r => r.Location))
                 {
-                    Resources.Add(e);
+                    dispatcher.InvokeAsync(() =>
+                    {
+                        var resourceView = new Views.ResourceListItem(resource, true);
+                        Resources.Add(resourceView);
 
-                    if (e.Resource is Manifest)
-                        setCurrentResource(e);
+                        if (resource is Manifest)
+                            setCurrentResource(resourceView);
+
+                    }, DispatcherPriority.Background);
                 }
             }
 
@@ -156,8 +164,12 @@ namespace Jofferson
                 var references = resource.Resource.References.Select(m => new Views.ReferenceListItem(m, Views.ReferenceListItem.Display.NoMod, resource.Resource));
                 var incomingReferences = resource.Resource.ReferredBy.Select(m => new Views.ReferenceListItem(m, Views.ReferenceListItem.Display.SourcedIncoming, resource.Resource));
 
+                var dispatcher = App.Current.Dispatcher;
+
                 foreach (var e in references.Union(incomingReferences).OrderBy(r => r.Reference.Valid).ThenBy(r => r.ToString()))//resource.Resource.References.OrderBy(r => r.Valid).Select(m => new Views.ReferenceListItem(m, Views.ReferenceListItem.Display.NoMod, resource.Resource)))
-                    References.Add(e);
+                {
+                    dispatcher.InvokeAsync(() => References.Add(e), DispatcherPriority.Background);
+                }
             }
 
             RaisePropertyChanged("CurrentResource");
