@@ -81,13 +81,30 @@ namespace Jofferson.Models
         /// </summary>
         private Resource invalidResource;
 
+        /// <summary>
+        /// Defines a missing resource.
+        /// </summary>
         public Resource InvalidResource
         {
             get
             {
-                if (invalidResource == null)
-                    invalidResource = new Resource("unknown", this, false);
-                return invalidResource;
+                return invalidResource ?? (invalidResource = new Resource(":unknown", this, false));
+            }
+        }
+
+        /// <summary>
+        /// Backing field: What we use to describe a virtual resource
+        /// </summary>
+        private Resource virtualResource;
+
+        /// <summary>
+        /// Defines a resource that is purely virtual (i.e. has been defined as such in the properties)
+        /// </summary>
+        public Resource VirtualResource
+        {
+            get
+            {
+                return virtualResource ?? (virtualResource = new Resource(":virtual", this, true));
             }
         }
 

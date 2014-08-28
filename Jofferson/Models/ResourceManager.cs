@@ -33,6 +33,11 @@ namespace Jofferson
         private static Queue<Resource> Queue = new Queue<Resource>();
 
         /// <summary>
+        /// A collection which has all files that will be created as "virtual resources" in case they do not exist.
+        /// </summary>
+        private static ICollection<string> VirtualResources = new HashSet<string>(Properties.Settings.Default.VirtualReferences.Cast<string>());
+
+        /// <summary>
         /// Initializes the resource manager at a certain location.
         /// This location should be the mods/ directory.
         /// </summary>
@@ -127,6 +132,7 @@ namespace Jofferson
                     pather.Add(script);
                     return true;
                 }
+
                 return false;
             }
             else
@@ -443,7 +449,13 @@ namespace Jofferson
                             Alias alias = mod.Aliases.FirstOrDefault(a => a.FullName.Equals(value));
 
                             if (alias == null && createIfNonExistant && value.Length > idx + 1)
-                                alias = new Alias(mod, value.Substring(idx + 1), mod.InvalidResource);
+                            {
+                                // Last chance: We're a virtual resource.
+                                if (VirtualResources.Contains(value))
+                                    alias = new Alias(mod, value.Substring(idx + 1), mod.VirtualResource);
+                                else // Nope, missing.
+                                    alias = new Alias(mod, value.Substring(idx + 1), mod.InvalidResource);
+                            }
 
                             return alias;
                         }

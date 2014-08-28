@@ -12,14 +12,6 @@ namespace Jofferson.Models
 {
     class Resource
     {
-        // TODO: make this prettier as a file or something like that
-        // Fake resources will be displayed as existing, but not valid.
-        // This won't invalidate things pointing to them, but they themselves will be displayed as broken.
-        private static ICollection<string> FakeResources = new HashSet<string>
-        {
-            "stonehearth:customization_variants"
-        };
-
         /// <summary>
         /// Outgoing references
         /// </summary>
@@ -59,16 +51,8 @@ namespace Jofferson.Models
             this.Location = location;
             this.Mod = mod;
             
-            if (!exists && FakeResources.Contains(location))
-            {
-                this.Exists = true;
-                this.Valid = false;
-            }
-            else
-            {
-                this.Exists = exists;
-                this.Valid = Exists;
-            }
+            this.Exists = exists;
+            this.Valid = Exists;
 
             this.References = new List<Reference>();
             this.ReferredBy = new List<Reference>();
