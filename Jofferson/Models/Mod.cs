@@ -88,7 +88,7 @@ namespace Jofferson.Models
         {
             get
             {
-                return invalidResource ?? (invalidResource = new Resource(":unknown", this, false));
+                return invalidResource ?? (invalidResource = new Resource("Jofferson:unknown", this, false));
             }
         }
 
@@ -104,7 +104,7 @@ namespace Jofferson.Models
         {
             get
             {
-                return virtualResource ?? (virtualResource = new Resource(":virtual", this, true));
+                return virtualResource ?? (virtualResource = new Resource("Jofferson:virtual", this, true));
             }
         }
 
